@@ -10,7 +10,6 @@
                 <button type="button" class="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
                     <router-link to="/companies/create">Criar Empresas</router-link>
                 </button>
-
             </div>
         </div>
         <div class="-mx-4 mt-10 ring-1 ring-gray-300 sm:mx-0 sm:rounded-lg">
@@ -22,6 +21,9 @@
                     </th>
                     <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 lg:table-cell">
                         Código
+                    </th>
+                    <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 lg:table-cell">
+                        Empresa
                     </th>
                     <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 lg:table-cell">
                         Sigla
@@ -42,8 +44,11 @@
                 <tr v-for="empresa in empresas" :key="empresa.recnum">
                     <td class="relative py-4 pl-4 pr-3 text-sm sm:pl-6">
                         <div class="font-medium text-gray-900">
-                            {{ empresa.codigo }}
+                            {{ empresa.recnum }}
                         </div>
+                    </td>
+                    <td class="relative py-4 pl-4 pr-3 text-sm sm:pl-6">
+                        {{ empresa.codigo }}
                     </td>
                     <td class="relative py-4 pl-4 pr-3 text-sm sm:pl-6">
                         {{ empresa.empresa }}
@@ -64,12 +69,13 @@
                         >
                             Editar
                         </router-link>
-                        <router-link
-                            :to="{ path: `/companies/${empresa.recnum}/edit` }"
+                        <a
+                            href="#"
+                            @click="deleteEmpresa(empresa.recnum)"
                             class="inline-flex items-center rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-white"
                         >
                             Excluir
-                        </router-link>
+                        </a>
                     </td>
                 </tr>
                 </tbody>
@@ -84,7 +90,7 @@ import axios from "axios";
 
 export default {
 
-    name: 'List',
+    name: 'Index',
 
     components: {
 
@@ -106,18 +112,12 @@ export default {
                 this.empresas = response.data
             });
         },
-        createEmpresas(){
-
-
-        },
-
-        updateEmpresas(empresa){
-
-
-        },
-
-        deleteEmpresas(empresa){
-
+        deleteEmpresa(recnum){
+            if(confirm('Tem certeza que deseja excluir?')){
+                this.axios.delete(`http://127.0.0.1:8000/api/empresas/${recnum}/delete`).then((response) => {
+                    this.getEmpresas()
+                });
+            }
         }
     }
 }

@@ -6,28 +6,11 @@
                     <label
                         for="codigo"
                         class="block text-sm font-medium leading-6 text-gray-900">
-                        Código
-                    </label>
-                    <div class="mt-2">
-                        <input
-                            v-model="codigo"
-                            type="text"
-                            id="codigo"
-                            name="codigo"
-                            class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                        />
-                    </div>
-                </div>
-
-                <div>
-                    <label
-                        for="empresa"
-                        class="block text-sm font-medium leading-6 text-gray-900">
                         Empresa
                     </label>
                     <div class="mt-2">
                         <input
-                            v-model="empresa"
+                            v-model="model.empresa"
                             type="text"
                             id="empresa"
                             name="empresa"
@@ -35,19 +18,18 @@
                         />
                     </div>
                 </div>
-
                 <div>
                     <label
-                        for="sigla"
+                        for="codigo"
                         class="block text-sm font-medium leading-6 text-gray-900">
-                        Sigla
+                        Código
                     </label>
                     <div class="mt-2">
                         <input
-                            v-model="sigla"
+                            v-model="model.codigo"
                             type="text"
-                            id="sigla"
-                            name="sigla"
+                            id="codigo"
+                            name="codigo"
                             class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                         />
                     </div>
@@ -62,9 +44,43 @@
                     <div class="mt-2">
                         <input
                             type="text"
-                            v-model="razao_social"
+                            v-model="model.razao_social"
                             id="razao_social"
                             name="razao_social"
+                            class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                        />
+                    </div>
+                </div>
+
+                <div>
+                    <label
+                        for="empresa"
+                        class="block text-sm font-medium leading-6 text-gray-900">
+                        Tipo
+                    </label>
+                    <div class="mt-2">
+                        <input
+                            v-model="model.tipo"
+                            type="text"
+                            id="tipo"
+                            name="tipo"
+                            class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                        />
+                    </div>
+                </div>
+
+                <div>
+                    <label
+                        for="sigla"
+                        class="block text-sm font-medium leading-6 text-gray-900">
+                        CPF_CNPJ
+                    </label>
+                    <div class="mt-2">
+                        <input
+                            v-model="model.cpf_cnpj"
+                            type="text"
+                            id="cpf_cnpj"
+                            name="cpf_cnpj"
                             class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                         />
                     </div>
@@ -85,6 +101,7 @@
                 >
                     <span class="block sm:inline">{{ response.message }}</span>
                 </div>
+
             </form>
         </div>
     </div>
@@ -102,10 +119,13 @@ export default {
 
     data(){
         return {
-            codigo: '',
-            empresa: '',
-            sigla: '',
-            razao_social: '',
+            model:{
+                empresa: '',
+                codigo: '',
+                razao_social: '',
+                tipo: '',
+                cpf_cnpj: '',
+            },
             response: {
                 color: '',
                 message: ''
@@ -116,50 +136,51 @@ export default {
     methods:{
         create(){
 
-            if(this.codigo == ''){
+            if(this.model.empresa == ''){
+                this.response.color = 'red';
+                this.response.message = 'Digite a empresa'
+                return;
+            }
+
+            if(this.model.codigo == ''){
                 this.response.color = 'red';
                 this.response.message = 'Digite o códido'
                 return;
             }
 
-            if(this.empresa == ''){
+            if(this.model.razao_social == ''){
                 this.response.color = 'red';
-                this.response.message = 'Digite o nome da empresa'
+                this.response.message = 'Digite a razão socials'
                 return;
             }
 
-            if(this.sigla == ''){
+            if(this.model.tipo == ''){
                 this.response.color = 'red';
-                this.response.message = 'Digite a sigla da empresa'
+                this.response.message = 'Digite o tipo'
                 return;
             }
 
-            if(this.razao_social == ''){
+            if(this.model.cpf_cnpj == ''){
                 this.response.color = 'red';
-                this.response.message = 'Digite a razão social'
+                this.response.message = 'Digite o cpf/cnpj'
                 return;
-            }
-
-            const payload = {
-                codigo: this.codigo,
-                empresa: this.empresa,
-                sigla: this.sigla,
-                razao_social: this.razao_social,
             }
 
             this.resetResponse();
 
-            this.axios.post('http://127.0.0.1:8000/api/empresas', payload).then((response) => {
+            const payload = this.model;
+
+            this.axios.post('http://127.0.0.1:8000/api/clientes', payload).then((response) => {
                 this.response.color = 'green';
-                this.response.message = 'Empresa criada com sucesso!';
+                this.response.message = 'Cliente criado com sucesso!';
 
                 setTimeout(() => {
-                    this.$router.push({ path : '/companies' });
+                    this.$router.push({ path : '/clientes' });
                 }, "1000");
 
             }).catch((e)=>{
                 this.response.color = 'red';
-                this.response.message = 'Erro ao criar empresa!';
+                this.response.message = 'Erro ao criar cliente!';
             })
         },
 

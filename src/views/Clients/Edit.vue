@@ -2,18 +2,19 @@
     <div class="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
         <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
             <form class="space-y-6" action="#" method="POST">
+
                 <div>
                     <label
-                        for="sigla"
+                        for="codigo"
                         class="block text-sm font-medium leading-6 text-gray-900">
-                        Sigla
+                        Código
                     </label>
                     <div class="mt-2">
                         <input
-                            v-model="model.sigla"
+                            v-model="model.codigo"
                             type="text"
-                            id="sigla"
-                            name="sigla"
+                            id="codigo"
+                            name="codigo"
                             class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                         />
                     </div>
@@ -36,6 +37,39 @@
                     </div>
                 </div>
 
+                <div>
+                    <label
+                        for="empresa"
+                        class="block text-sm font-medium leading-6 text-gray-900">
+                        Tipo
+                    </label>
+                    <div class="mt-2">
+                        <input
+                            v-model="model.tipo"
+                            type="text"
+                            id="tipo"
+                            name="tipo"
+                            class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                        />
+                    </div>
+                </div>
+
+                <div>
+                    <label
+                        for="sigla"
+                        class="block text-sm font-medium leading-6 text-gray-900">
+                        CPF_CNPJ
+                    </label>
+                    <div class="mt-2">
+                        <input
+                            v-model="model.cpf_cnpj"
+                            type="text"
+                            id="cpf_cnpj"
+                            name="cpf_cnpj"
+                            class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                        />
+                    </div>
+                </div>
                 <div>
                     <button
                         @click.stop.prevent="update()"
@@ -61,7 +95,7 @@
 import axios from "axios";
 export default {
 
-    name: 'CompaniesEdit',
+    name: 'ClientsEdit',
 
     components: {
     },
@@ -70,9 +104,9 @@ export default {
         return {
             model:{
                 codigo: '',
-                empresa: '',
-                sigla: '',
                 razao_social: '',
+                tipo: '',
+                cpf_cnpj: '',
             },
             response: {
                 color: '',
@@ -82,16 +116,16 @@ export default {
     },
 
     mounted() {
-        this.getCompanieData(this.$route.params.id);
+        this.getClientData(this.$route.params.id);
     },
 
     methods:{
-        getCompanieData(id){
-            this.axios.get(`http://127.0.0.1:8000/api/empresas/${id}/edit`).then((response) => {
+        getClientData(id){
+            this.axios.get(`http://127.0.0.1:8000/api/clientes/${id}/edit`).then((response) => {
                 this.model = response.data
             }).catch((error)=>{
                 if(error.request.status == 404)
-                    this.$router.push({ path : '/companies' });
+                    this.$router.push({ path : '/clientes' });
             });
         },
 
@@ -102,21 +136,21 @@ export default {
                 return;
             }
 
-            if(this.model.empresa == ''){
-                this.response.color = 'red';
-                this.response.message = 'Digite o nome da empresa'
-                return;
-            }
-
-            if(this.model.sigla == ''){
-                this.response.color = 'red';
-                this.response.message = 'Digite a sigla da empresa'
-                return;
-            }
-
             if(this.model.razao_social == ''){
                 this.response.color = 'red';
-                this.response.message = 'Digite a razão social'
+                this.response.message = 'Digite a razão socials'
+                return;
+            }
+
+            if(this.model.tipo == ''){
+                this.response.color = 'red';
+                this.response.message = 'Digite o tipo'
+                return;
+            }
+
+            if(this.model.cpf_cnpj == ''){
+                this.response.color = 'red';
+                this.response.message = 'Digite o cpf/cnpj'
                 return;
             }
 
@@ -125,17 +159,17 @@ export default {
             const payload = this.model;
 
             const id = this.model.recnum;
-            this.axios.put(`http://127.0.0.1:8000/api/empresas/${id}/edit`, payload).then((response) => {
+            this.axios.put(`http://127.0.0.1:8000/api/clientes/${id}/edit`, payload).then((response) => {
                 this.response.color = 'green';
-                this.response.message = 'Empresa atualizada com sucesso!';
+                this.response.message = 'Cliente atualizada com sucesso!';
 
                 setTimeout(() => {
-                    this.$router.push({ path : '/companies' });
+                    this.$router.push({ path : '/clientes' });
                 }, "1000");
 
             }).catch((e)=>{
                 this.response.color = 'red';
-                this.response.message = 'Erro ao criar empresa!';
+                this.response.message = 'Erro ao atualizar cliente!';
             })
         },
 
