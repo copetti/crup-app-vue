@@ -1,32 +1,34 @@
 <template>
-  <nav>
-    <router-link to="/companies">Empresas</router-link> |
-      <router-link to="/clientes">Clientes</router-link>
-  </nav>
-  <router-view/>
+    <header class="absolute inset-x-0 top-0 z-50 flex h-16 border-b border-gray-900/10">
+        <div class="mx-auto flex w-full max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-1 items-center gap-x-6">
+                <button type="button" class="-m-3 p-3 md:hidden" @click="mobileMenuOpen = true">
+                    <span class="sr-only">Open main menu</span>
+                    <Bars3Icon class="h-5 w-5 text-gray-900" aria-hidden="true" />
+                </button>
+                <img class="h-8 w-auto" src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600" alt="Your Company" />
+            </div>
+            <nav class="hidden md:flex md:gap-x-11 md:text-sm md:font-semibold md:leading-6 md:text-gray-700">
+                <router-link to="/companies">Empresas</router-link>
+                <router-link to="/clientes">Clientes</router-link>
+            </nav>
+            <div class="flex flex-1 items-center justify-end gap-x-8">
+                <button type="button" class="-m-2.5 p-2.5 text-gray-400 hover:text-gray-500">
+                    <span class="sr-only">View notifications</span>
+                    <BellIcon class="h-6 w-6" aria-hidden="true" />
+                </button>
+                <a href="#" class="-m-1.5 p-1.5">
+                    <span class="sr-only">Your profile</span>
+                    <img class="h-8 w-8 rounded-full bg-gray-800" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="" />
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="mt-6 space-y-16 py-16 xl:space-y-20">
+            <router-view/>
+        </div>
+    </main>
 </template>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-
-nav {
-  padding: 30px;
-}
-
-nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-nav a.router-link-exact-active {
-  color: #42b983;
-}
-</style>
-<script setup lang="ts">
-</script>
