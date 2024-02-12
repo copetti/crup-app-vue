@@ -4,18 +4,26 @@
             <form class="space-y-6" action="#" method="POST">
                 <div>
                     <label
-                        for="codigo"
-                        class="block text-sm font-medium leading-6 text-gray-900">
+                        for="empresa"
+                        class="block text-sm font-medium leading-6 text-gray-900"
+                    >
                         Empresa
                     </label>
                     <div class="mt-2">
-                        <input
+                        <select
                             v-model="model.empresa"
-                            type="text"
                             id="empresa"
                             name="empresa"
-                            class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                        />
+                            class="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                        >
+                            <option
+                                v-for="empresa in listaEmpresas"
+                                :key="empresa.codigo"
+                                :value="empresa.codigo"
+                            >
+                                {{ empresa.razao_social }}
+                            </option>
+                        </select>
                     </div>
                 </div>
                 <div>
@@ -54,18 +62,25 @@
 
                 <div>
                     <label
-                        for="empresa"
-                        class="block text-sm font-medium leading-6 text-gray-900">
+                        for="tipo"
+                        class="block text-sm font-medium leading-6 text-gray-900"
+                    >
                         Tipo
                     </label>
                     <div class="mt-2">
-                        <input
+                        <select
                             v-model="model.tipo"
-                            type="text"
                             id="tipo"
                             name="tipo"
-                            class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                        />
+                            class="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                        >
+                            <option
+                                v-for="tipo in tipos"
+                                :key="tipo.id"
+                            >
+                                {{ tipo.nome }}
+                            </option>
+                        </select>
                     </div>
                 </div>
 
@@ -130,7 +145,16 @@ export default {
                 color: '',
                 message: ''
             },
+            listaEmpresas: {},
+            tipos: [
+                { id: 1, nome: 'PF' },
+                { id: 2, nome: 'PJ' }
+            ]
         }
+    },
+
+    created() {
+        this.getEmpresas();
     },
 
     methods:{
@@ -166,8 +190,6 @@ export default {
                 return;
             }
 
-            this.resetResponse();
-
             const payload = this.model;
 
             this.axios.post('http://127.0.0.1:8000/api/clientes', payload).then((response) => {
@@ -184,9 +206,10 @@ export default {
             })
         },
 
-        resetResponse(){
-            this.response.color = '';
-            this.response.message = ''
+        getEmpresas(){
+            this.axios.get('http://127.0.0.1:8000/api/empresas').then((response) => {
+                this.listaEmpresas = response.data
+            });
         },
     }
 }
